@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<COMPONENT> 
+  <HEADER AUTHOR="Michael Daum, Sebastian Flach, Florent Jochaud" COMPATIBILITY="ALL" DATA_AUTO_PROPAGATE="false" PLATEFORM="ALL" RELEASE_DATE="20080229A" SCHEMA_AUTO_PROPAGATE="true" SERIAL="" STARTABLE="true" STATUS="ALPHA" VERSION="0.102" VISIBLE="true"> 
+    <SIGNATURE/> 
+  </HEADER>  
+  <FAMILIES> 
+    <FAMILY>Business_Intelligence/OLAP_Cube/TM1</FAMILY> 
+  </FAMILIES>  
+  <DOCUMENTATION> 
+    <URL/> 
+  </DOCUMENTATION>  
+  <CONNECTORS>
+    <CONNECTOR CTYPE="FLOW" MAX_INPUT="1"/>
+    <CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="1" MAX_INPUT="1"/>
+    <CONNECTOR CTYPE="SUBJOB_OK" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="SUBJOB_ERROR" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="COMPONENT_OK" />
+    <CONNECTOR CTYPE="COMPONENT_ERROR" />
+    <CONNECTOR CTYPE="RUN_IF" />
+  </CONNECTORS>
+  <PARAMETERS> 
+  <!-- <PARAMETER NAME="PROPERTY" FIELD="PROPERTY_TYPE" SHOW="true"
+			NUM_ROW="10" REPOSITORY_VALUE="JSON" /> -->
+    <PARAMETER FIELD="TEXT" 
+    NAME="HOSTNAME" 
+    NUM_ROW="1" 
+    REQUIRED="true"
+    /> 
+    <PARAMETER NAME="SCHEMA" FIELD="SCHEMA_TYPE" REQUIRED="true" NUM_ROW="1"/>
+    <PARAMETER FIELD="TEXT" 
+    NAME="APPLICATION" 
+    NUM_ROW="2" 
+    REQUIRED="true"
+    /> 
+    <PARAMETER FIELD="TEXT" 
+    NAME="USERNAME" 
+    NUM_ROW="3" 
+    REQUIRED="true"
+    /> 
+    <PARAMETER FIELD="TEXT" 
+    NAME="PASSWORD" 
+    NUM_ROW="3" 
+    REQUIRED="true"
+    /> 
+    <PARAMETER FIELD="CHECK" 
+    NAME="SHOWROWHEADERS" 
+    NUM_ROW="4" 
+    /> 
+    <PARAMETER FIELD="MEMO" 
+    NAME="MDXQUERY" 
+    NUM_ROW="5" 
+    REQUIRED="true"
+    /> 
+    	<PARAMETER
+      NAME="GUESS_SCHEMA"
+      FIELD="GUESS_SCHEMA"
+      NUM_ROW="6"
+    >
+      <DEFAULT>""</DEFAULT>
+    </PARAMETER>
+     <PARAMETER
+                  NAME="DIE_ON_ERROR"
+                  FIELD="CHECK"
+                  NUM_ROW="100"
+                >
+                <DEFAULT>false</DEFAULT>
+                </PARAMETER>
+
+                   <PARAMETER
+      NAME="JAVA_COMMAND"
+      FIELD="JAVA_COMMAND_NAME"
+      NUM_ROW="8"
+    >
+    <DEFAULT>""</DEFAULT>
+                </PARAMETER>
+  </PARAMETERS>  
+ <!-- <ADVANCED_PARAMETERS> 
+    <PARAMETER FIELD="TEXT" NAME="PROPERTYADVANCED" NUM_ROW="1"/> 
+  </ADVANCED_PARAMETERS> -->   
+  <CODEGENERATION> 
+    <IMPORTS> 
+      <IMPORT MODULE="TM1JavaApi.jar" NAME="TM1JavaApi" REQUIRED="true"/> 
+    </IMPORTS> 
+  </CODEGENERATION>  
+  <RETURNS> 
+    <RETURN AVAILABILITY="AFTER" NAME="NB_LINE" TYPE="id_Integer"/> 
+  </RETURNS> 
+</COMPONENT>

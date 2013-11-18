@@ -1,0 +1,74 @@
+<%@ jet 
+	imports="
+		org.talend.core.model.process.INode 
+		org.talend.core.model.process.ElementParameterParser 
+		org.talend.core.model.metadata.IMetadataTable 
+		org.talend.core.model.metadata.IMetadataColumn 
+		org.talend.core.model.process.IConnection
+		org.talend.core.model.process.IConnectionCategory
+		org.talend.designer.codegen.config.CodeGeneratorArgument
+		org.talend.core.model.metadata.types.JavaTypesManager
+		org.talend.core.model.metadata.types.JavaType
+		java.util.List 
+    	java.util.Map
+	" 
+%>
+<% 
+    CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+    INode node = (INode)codeGenArgument.getArgument();
+    String cid = node.getUniqueName();	
+    
+    String hostname = ElementParameterParser.getValue(node, "__HOSTNAME__");
+	String application = ElementParameterParser.getValue(node, "__APPLICATION__");
+	String username = ElementParameterParser.getValue(node, "__USERNAME__");
+	String password = ElementParameterParser.getValue(node, "__PASSWORD__");
+    String mdxQuery = ElementParameterParser.getValue(node, "__MDXQUERY__");
+    
+    String showRowHeader = ElementParameterParser.getValue(node, "__SHOWROWHEADERS__");
+	boolean isShowRowHeader = "true".equals(showRowHeader);
+    String dieOnError = ElementParameterParser.getValue(node, "__DIE_ON_ERROR__");
+	boolean isDieOnError = "true".equals(showRowHeader);
+%>
+
+
+com.applix.tm1.TM1Bean bean_<%=cid%> = new com.applix.tm1.TM1Bean();
+bean_<%=cid%>.setAdminHost(<%=hostname%>);
+com.applix.tm1.TM1Server connection_<%=cid%> = bean_<%=cid%>.openConnection(<%=application%>, <%=username%>, <%=password%>);
+System.out.println("Available Servers: " + bean_<%=cid%>.getNumberOfServers());
+System.out.println("I am the begin section");
+com.applix.tm1.TM1MdxView m_view_<%=cid%> = new com.applix.tm1.TM1MdxView(connection_<%=cid%>,<%=mdxQuery%>);
+com.applix.tm1.TM1MdxAxis ax_<%=cid%> = m_view_<%=cid%>.GetAxis(0);
+com.applix.tm1.TM1MdxAxis[] axes_<%=cid%>;
+java.util.List<com.applix.tm1.TM1MdxAxis> axesList_<%=cid%> = new java.util.ArrayList<com.applix.tm1.TM1MdxAxis>();
+java.util.Map<Object, Object> fieldValues_<%=cid%> = new java.util.HashMap<Object, Object>();
+
+
+ String[] fieldNames_<%=cid%>;
+  String[] internalFieldNames_<%=cid%>;
+  int[] axisPositions_<%=cid%>;
+		fieldNames_<%=cid%> = new String[ax_<%=cid%>.getTupleCount()];
+		internalFieldNames_<%=cid%> = new String[ax_<%=cid%>.getTupleCount()];
+			boolean[] iteratePositions_<%=cid%>;
+		
+		
+		 for (int i_<%=cid%> = 0; i_<%=cid%> < m_view_<%=cid%>.getAxisCount(); i_<%=cid%>++) {
+    		com.applix.tm1.TM1MdxAxis axInner_<%=cid%> = m_view_<%=cid%>.GetAxis(i_<%=cid%>);
+
+
+    		
+			axesList_<%=cid%>.add(axInner_<%=cid%>);
+		}
+		axes_<%=cid%>=axesList_<%=cid%>.toArray(new com.applix.tm1.TM1MdxAxis[axesList_<%=cid%>.size()]);
+		axisPositions_<%=cid%> = new int[axes_<%=cid%>.length];
+		iteratePositions_<%=cid%> = new boolean[axes_<%=cid%>.length];
+		
+		for (int k_<%=cid%> = 0; k_<%=cid%> < ax_<%=cid%>.getTupleCount(); k_<%=cid%> ++)
+		{
+			fieldNames_<%=cid%>[k_<%=cid%>]= ( ax_<%=cid%>.GetAxisValue(k_<%=cid%>,0, "MEMBER_UNIQUE_NAME").getString());
+			internalFieldNames_<%=cid%>[k_<%=cid%>]=fieldNames_<%=cid%>[k_<%=cid%>].replaceAll("\\-|\\.|\\[|\\]|\\s|\\(|\\)","_");
+			System.out.println("Fieldname "+ fieldNames_<%=cid%>[k_<%=cid%>] +" as "+ internalFieldNames_<%=cid%>[k_<%=cid%>]+ " added.");
+		}
+		
+	for (	int j_<%=cid%>=0; j_<%=cid%> < m_view_<%=cid%>.GetAxis(1).getTupleCount() ; j_<%=cid%>++){
+	
+///////////////////////

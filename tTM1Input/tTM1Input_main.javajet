@@ -1,0 +1,94 @@
+<%@ jet 
+	imports="
+		org.talend.core.model.process.INode 
+		org.talend.core.model.process.ElementParameterParser 
+		org.talend.core.model.metadata.IMetadataTable 
+		org.talend.core.model.metadata.IMetadataColumn 
+		org.talend.core.model.process.EConnectionType
+		org.talend.core.model.process.IConnection
+		org.talend.core.model.process.IConnectionCategory
+		org.talend.designer.codegen.config.CodeGeneratorArgument
+		org.talend.core.model.metadata.types.JavaTypesManager
+		org.talend.core.model.metadata.types.JavaType
+		java.util.List 
+    	java.util.Map		
+	" 
+%>
+<% 
+    CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+    INode node = (INode)codeGenArgument.getArgument();
+    String cid = node.getUniqueName();
+    
+    %>
+ 
+    System.out.println("I am the beginning of the main section");
+  int k_<%=cid%>;
+    <%
+
+    List<IMetadataTable> metadatas = node.getMetadataList();
+    if ((metadatas != null) && (metadatas.size() > 0)) {//b
+ IMetadataTable metadata = metadatas.get(0);
+ if (metadata != null) {//a
+ %>
+
+ <%
+  List<IMetadataColumn> columns = metadata.getListColumns(); 
+      List< ? extends IConnection> outConns = node.getOutgoingConnections();
+    for (IConnection conn : outConns)
+    	{ //2
+   			if (conn.getLineStyle().equals(EConnectionType.FLOW_MAIN)||conn.getLineStyle().equals(EConnectionType.FLOW_MERGE))
+   			{ //3
+    		String outputConnName = conn.getName();
+    		    for (int i = 0; i < columns.size(); i++)
+    {//4
+     IMetadataColumn column = columns.get(i);
+%>
+System.out.println("I am the main section");
+
+//for (int k_<%=cid%> = 0; k_<%=cid%> < ax_<%=cid%>.getTupleCount(); k_<%=cid%> ++)
+k_<%=cid%>=<%=i%>;
+{
+				
+
+	System.out.println("Für Position (Row/Column) " +axisPositions_<%=cid%>[1]+"="+"??"+"/" +axisPositions_<%=cid%>[0]+"="+k_<%=cid%>);
+	fieldValues_<%=cid%>.put(internalFieldNames_<%=cid%>[k_<%=cid%>], m_view_<%=cid%>.GetCellValue(axisPositions_<%=cid%>[1], k_<%=cid%> ).getReal());
+	
+	<%=outputConnName %>.<%=column.getLabel() %> =m_view_<%=cid%>.GetCellValue(j_<%=cid%>, k_<%=cid%> ).getReal();
+	System.out.println(internalFieldNames_<%=cid%>[k_<%=cid%>]+" "+ m_view_<%=cid%>.GetCellValue(j_<%=cid%>, k_<%=cid%> ).getReal());
+	//TODO bloeder hack
+	if (k_<%=cid%> < ax_<%=cid%>.getTupleCount()-1)		{
+		boolean next_<%=cid%>;
+		int i_<%=cid%> = 0;
+		for (; i_<%=cid%> < axes_<%=cid%>.length; ++i_<%=cid%>)
+		{
+			if (iteratePositions_<%=cid%>[i_<%=cid%>])
+			{
+				System.out.println(	"TupleCount für Achse "+i_<%=cid%>+" ist "+axes_<%=cid%>[i_<%=cid%>].getTupleCount());
+				++axisPositions_<%=cid%>[i_<%=cid%>];
+				if (axisPositions_<%=cid%>[i_<%=cid%>] >= axes_<%=cid%>[i_<%=cid%>].getTupleCount())
+				{
+					axisPositions_<%=cid%>[i_<%=cid%>] = 0;
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+
+//		next_<%=cid%> = i_<%=cid%> < axes_<%=cid%>.length;
+//		return next_<%=cid%>;
+	};
+}
+
+
+//<%=outputConnName %>.<%=column.getLabel() %> = 0.0f+<%=i %>;
+<%
+    }//4
+   }//3
+  }//2
+ }//a
+}//b
+%>
+
+ 
