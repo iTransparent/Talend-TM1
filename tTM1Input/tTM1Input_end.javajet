@@ -20,6 +20,6 @@
 %>
 
 //connection_<%=cid%>.close();
-System.out.println("I am the end section");
+//System.out.println("I am the end section");
 
 }

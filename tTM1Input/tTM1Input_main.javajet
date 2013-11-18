@@ -21,7 +21,7 @@
     
     %>
  
-    System.out.println("I am the beginning of the main section");
+    //System.out.println("I am the beginning of the main section");
   int k_<%=cid%>;
     <%
 
@@ -43,18 +43,18 @@
     {//4
      IMetadataColumn column = columns.get(i);
 %>
-System.out.println("I am the main section");
+//System.out.println("I am the main section");
 
 //for (int k_<%=cid%> = 0; k_<%=cid%> < ax_<%=cid%>.getTupleCount(); k_<%=cid%> ++)
 k_<%=cid%>=<%=i%>;
 {
 				
 
-	System.out.println("Für Position (Row/Column) " +axisPositions_<%=cid%>[1]+"="+"??"+"/" +axisPositions_<%=cid%>[0]+"="+k_<%=cid%>);
+	//System.out.println("Für Position (Row/Column) " +axisPositions_<%=cid%>[1]+"="+"??"+"/" +axisPositions_<%=cid%>[0]+"="+k_<%=cid%>);
 	fieldValues_<%=cid%>.put(internalFieldNames_<%=cid%>[k_<%=cid%>], m_view_<%=cid%>.GetCellValue(axisPositions_<%=cid%>[1], k_<%=cid%> ).getReal());
 	
 	<%=outputConnName %>.<%=column.getLabel() %> =m_view_<%=cid%>.GetCellValue(j_<%=cid%>, k_<%=cid%> ).getReal();
-	System.out.println(internalFieldNames_<%=cid%>[k_<%=cid%>]+" "+ m_view_<%=cid%>.GetCellValue(j_<%=cid%>, k_<%=cid%> ).getReal());
+	//System.out.println(internalFieldNames_<%=cid%>[k_<%=cid%>]+" "+ m_view_<%=cid%>.GetCellValue(j_<%=cid%>, k_<%=cid%> ).getReal());
 	//TODO bloeder hack
 	if (k_<%=cid%> < ax_<%=cid%>.getTupleCount()-1)		{
 		boolean next_<%=cid%>;
@@ -63,7 +63,7 @@ k_<%=cid%>=<%=i%>;
 		{
 			if (iteratePositions_<%=cid%>[i_<%=cid%>])
 			{
-				System.out.println(	"TupleCount für Achse "+i_<%=cid%>+" ist "+axes_<%=cid%>[i_<%=cid%>].getTupleCount());
+				//System.out.println(	"TupleCount für Achse "+i_<%=cid%>+" ist "+axes_<%=cid%>[i_<%=cid%>].getTupleCount());
 				++axisPositions_<%=cid%>[i_<%=cid%>];
 				if (axisPositions_<%=cid%>[i_<%=cid%>] >= axes_<%=cid%>[i_<%=cid%>].getTupleCount())
 				{
