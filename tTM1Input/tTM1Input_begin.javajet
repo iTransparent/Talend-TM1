@@ -27,22 +27,55 @@
     String showRowHeader = ElementParameterParser.getValue(node, "__SHOWROWHEADERS__");
 	boolean isShowRowHeader = "true".equals(showRowHeader);
     String dieOnError = ElementParameterParser.getValue(node, "__DIE_ON_ERROR__");
-	boolean isDieOnError = "true".equals(showRowHeader);
+	boolean isDieOnError = "true".equals(dieOnError);
 %>
 
 
 com.applix.tm1.TM1Bean bean_<%=cid%> = new com.applix.tm1.TM1Bean();
 bean_<%=cid%>.setAdminHost(<%=hostname%>);
-com.applix.tm1.TM1Server connection_<%=cid%> = bean_<%=cid%>.openConnection(<%=application%>, <%=username%>, <%=password%>);
-System.out.println("Available Servers: " + bean_<%=cid%>.getNumberOfServers());
-//System.out.println("I am the begin section");
-com.applix.tm1.TM1MdxView m_view_<%=cid%> = new com.applix.tm1.TM1MdxView(connection_<%=cid%>,<%=mdxQuery%>);
+com.applix.tm1.TM1MdxView m_view_<%=cid%>=null;
+com.applix.tm1.TM1Server connection_<%=cid%>=null; 
+
+try {
+	//Connection might fail, if it fails the TM1 library throws internal NPE
+	connection_<%=cid%> = bean_<%=cid%>.openConnection(<%=application%>, <%=username%>, <%=password%>);
+	System.out.println("Available Servers: " + bean_<%=cid%>.getNumberOfServers());
+	//System.out.println("I am the begin section");
+	} catch (Exception e) {
+
+		System.err.println("Error: Connection could not be established");
+		globalMap.put("<%=cid%>_ERROR_MESSAGE", "Connection could not be established");
+
+	globalMap.put("<%=cid%>_ERROR_MESSAGE", e.getMessage());
+<%   if (isDieOnError) { %>
+	throw e;
+<%  } %>
+}
+
+try{	
+	// Query might be wrong
+	m_view_<%=cid%> = new com.applix.tm1.TM1MdxView(connection_<%=cid%>,<%=mdxQuery%>);
+} catch (Exception e) {
+	globalMap.put("<%=cid%>_ERROR_MESSAGE", e.getMessage());
+<%   if (isDieOnError) { %>
+	throw e;
+<%  } %>
+}
+
+if (m_view_<%=cid%> == null) { // can be both wrong query or wrong connection
+		System.err.println("Error: Connection could not be established or wrong query");
+		globalMap.put("<%=cid%>_ERROR_MESSAGE", "Connection could not be established or wrong query");
+		<%   if (isDieOnError) { %>
+	throw new Exception("Connection could not be established or wrong query");
+<%  } %>
+}
+
 com.applix.tm1.TM1MdxAxis ax_<%=cid%> = m_view_<%=cid%>.GetAxis(0);
 com.applix.tm1.TM1MdxAxis[] axes_<%=cid%>;
 java.util.List<com.applix.tm1.TM1MdxAxis> axesList_<%=cid%> = new java.util.ArrayList<com.applix.tm1.TM1MdxAxis>();
 java.util.Map<Object, Object> fieldValues_<%=cid%> = new java.util.HashMap<Object, Object>();
 
-
+int <%=cid%>_rowCount = 0; // initialize the counter
  String[] fieldNames_<%=cid%>;
   String[] internalFieldNames_<%=cid%>;
   int[] axisPositions_<%=cid%>;
@@ -70,5 +103,5 @@ java.util.Map<Object, Object> fieldValues_<%=cid%> = new java.util.HashMap<Objec
 		}
 		
 	for (	int j_<%=cid%>=0; j_<%=cid%> < m_view_<%=cid%>.GetAxis(1).getTupleCount() ; j_<%=cid%>++){
-	
+		<%=cid%>_rowCount++; // increment the counter
 ///////////////////////

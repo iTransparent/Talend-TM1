@@ -23,3 +23,5 @@
 //System.out.println("I am the end section");
 
 }
+
+globalMap.put("<%=cid%>_NB_LINE", <%=cid%>_rowCount);
